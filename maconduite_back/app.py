@@ -2,9 +2,8 @@ from flask import Flask
 import flask_sqlalchemy
 import os
 import logging
+from maconduite_back import loginconfig
 
-logging.basicConfig(level=logging.INFO)
-# logger = logging.getLogger('gunicorn.error')
 logger = logging.getLogger(__name__)
 
 db = flask_sqlalchemy.SQLAlchemy()
@@ -67,18 +66,15 @@ def add_mock_data(app):
         from datetime import datetime
 
         # logger.info('Initializing database with testing data.')
-        logger.info('> Dropping all tables.')
-        db.drop_all()
-        db.session.commit()
         logger.info('> Creating new tables.')
         db.create_all()
         db.session.commit()
 
-        user1 = User(email='admin', password="michel", first_name='SADEU', last_name='NGAKOU')
-        user2 = User(email='mick', password="michelo", first_name='SADEUH', last_name='NGAKOU')
-        db.session.add(user1)
-        db.session.add(user2)
-        db.session.commit()
-        print(user1.json_out())
-        print(user2.json_out())
+        # user1 = User(email='admin', password="michel", first_name='SADEU', last_name='NGAKOU')
+        # user2 = User(email='mick', password="michelo", first_name='SADEUH', last_name='NGAKOU')
+        # db.session.add(user1)
+        # db.session.add(user2)
+        # db.session.commit()
+        # print(user1.json_out())
+        # print(user2.json_out())
         logger.info('Database has been successfully connected.')
