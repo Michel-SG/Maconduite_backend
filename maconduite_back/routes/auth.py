@@ -2,9 +2,10 @@ from flask import Blueprint, request, jsonify, abort, Response, current_app
 from http import HTTPStatus
 import sqlalchemy
 from maconduite_back.models.user import User
+import logging
+from maconduite_back.app import db
 
-from maconduite_back.app import db, logger
-
+logger = logging.getLogger(__name__)
 # (1) We instanciate the blueprint
 auth = Blueprint('auth', __name__)
 
@@ -21,13 +22,11 @@ def get_register():
         There is also no route to register as a Runner, because a Runner has to be linked
         to a Trainer. Only the Trainer or the Admin can create an account for the Runner.
     """
-    try:
-        # if role not in ['trainer', 'runner']:
-            # raise Exception("'role' should be either trainer, or runner.")
-
+    try:  
         users = db.session.query(User).all()
         json = []
-        print(f"json value :: {users}")
+        
+        logger.info(f'> Users :: {users}')
         for r in users:
             json.append(r.json_out())
         return "<p>Hello, World goood!</p>"

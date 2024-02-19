@@ -2,9 +2,8 @@ from flask import Flask
 import flask_sqlalchemy
 import os
 import logging
+from maconduite_back import loginconfig
 
-logging.basicConfig(level=logging.INFO)
-# logger = logging.getLogger('gunicorn.error')
 logger = logging.getLogger(__name__)
 
 db = flask_sqlalchemy.SQLAlchemy()
