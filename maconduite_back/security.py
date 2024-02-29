@@ -25,3 +25,44 @@ The RBAC rules are simple:
 - if the user is an Admin  → he can access all Sessions
 - if the user is a Client  → he can access only his Sessions
 """
+from datetime import datetime, timedelta
+import logging
+from flask import Blueprint, request, jsonify, abort, Response, current_app
+
+
+logger = logging.getLogger(__name__)
+
+def generate_token(public_id, role):
+    """Generate an access token for the user.
+
+    The token is a JSON Web Token (or JWT), and it contains user information cryptographically
+    signed by the server (i.e. with the server JWT_SECRET_KEY). Therefore, the contents of
+    the token are readable by everyone, but no one can forge a similar token.
+    See also: https://jwt.io/introduction
+
+    Parameters:
+        public_id (int) : the public id of the user whom we generate the token for.
+        role (string)   : can be 'client' or 'admin'.
+                          This role determines what the user will have access to.
+
+    Returns:
+        string: the token (e.g. 'eyJhbGciOiJIUz.I1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiO')
+
+    Details:
+        On https://jwt.io/ you can paste a token and see its content or check the signature.
+    """
+    expiration_date = (
+        datetime.now() + timedelta(hours = current_app.config['JWT_EXP_DELTA_HOURS'])
+    )
+    logger.info(f'access token expiration date : {expiration_date}')
+    token_contents = {
+            'public_id' : public_id,
+            'exp'       : expiration_date,
+            'role'      : role,
+    }
+    token = jwt.encode(
+        payload   =token_contents,
+        key       =current_app.config['JWT_SECRET'],
+        algorithm =current_app.config['JWT_ALGORITHM'],
+    )
+    return token
