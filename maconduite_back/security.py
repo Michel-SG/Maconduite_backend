@@ -28,6 +28,8 @@ The RBAC rules are simple:
 from datetime import datetime, timedelta
 import logging
 import jwt
+from functools import wraps
+from http import HTTPStatus
 from flask import Blueprint, request, jsonify, abort, Response, current_app
 
 
@@ -67,3 +69,111 @@ def generate_token(public_id, role):
         algorithm =current_app.config['JWT_ALGORITHM'],
     )
     return token
+
+
+def auth_required(authorized_roles=['admin', 'client']):
+    """Decorator for ensuring authentication and RBAC on a Flask route.
+    
+    The wrapper looks for the access token, provided in the Authorization header.
+    It then decodes the token, and feeds it to the wrapped route.
+
+    A protected route is a route which require authentication and Role-Based Access-Control.
+    There are many protected routes in this API (in fact almost all of them, except /register).
+
+    But we don't want to implement authentication and RBAC *inside* a route,
+    We want a generic protection function, able to protect any route, that we can add or
+    remove on a route whenever we like. → Such a function is called a decorator.
+
+    A decorator returns another function, after some verifications.
+    In this case, we want a decorator that returns a Flask route, after performing the
+    authentication and RBAC.
+
+    See also:
+    https://realpython.com/primer-on-python-decorators/
+    https://blog.miguelgrinberg.com/post/the-ultimate-guide-to-python-decorators-part-iii-decorators-with-arguments
+
+    Parameters:
+        route (function): a Flask route i.e. a function decorated with @Flask.route
+            See also https://flask.palletsprojects.com/en/2.0.x/api/#flask.Flask.route
+
+    Returns:
+        func: the function wrapper
+
+    Details:
+        (!) Flask requires to associate a single 'view function' with an 'endpoint'.
+        This is compromised when we use a decorator on a Flask route,
+        because a decorator overwrites the name of the wrapped function at runtime.
+        (more specifically, it overwrites the attribute __name__, among others).
+
+        So when we define two Flask routes:
+
+        @app.route('/api/r1')
+        @decorator
+        def route_1()
+
+        @app.route('/api/r2')
+        @decorator
+        def route_2()
+
+        At runtime they will both be renamed 'decorator', and thus they will define the
+        endpoint 'api.decorator', instead of defining two endpoints 'api.route_1' and
+        'api.route_2'.
+
+        Hence we will get this Flask error:
+        `AssertionError:
+        View function mapping is overwriting an existing endpoint function: api.decorator`
+
+        To prevent this, we use the tool @wraps from functools.
+        @wraps updates the wrapped function name at runtime, after it has been decorated.
+        
+        This way, route names are preserved and Flask endpoints are different.
+
+        See also https://stackoverflow.com/a/42254713/6402299
+        See also https://docs.python.org/3/library/functools.html#functools.wraps
+    """
+
+    @wraps(authorized_roles)
+    def inner_decorator(route):
+
+        @wraps(route)
+        def wrapper(*args, **kwargs):
+            try:
+                logger.info('Verifying access token...')
+
+                found_token = request.headers['Authorization'].split('Bearer ')[1]
+                # logger.info(f'Found access token: {found_token}')
+
+                decoded_token = jwt.decode(
+                    found_token,
+                    current_app.config['JWT_SECRET'],
+                    current_app.config['JWT_ALGORITHM']
+                )
+                logger.info(f'Decoded access token: {decoded_token}')
+
+                assert 'exp' in decoded_token
+                assert 'public_id' in decoded_token
+                assert decoded_token['role'] in ['admin', 'client']
+                assert decoded_token['role'] in authorized_roles
+
+            except (
+                KeyError, IndexError, AssertionError, jwt.exceptions.InvalidTokenError
+            ) as err:
+                logger.exception(f'Unauthorized: {err}')
+                abort(Response(
+                    f'Unauthorized: invalid access_token.',
+                    HTTPStatus.UNAUTHORIZED
+                ))
+
+            return route(decoded_token, *args, **kwargs)
+
+            # NOTE: if an exception is raised here, it means that the protected route did
+            # not implement a proper {try/except all}. Exceptions should not arise here.
+            # except Exception as err:
+            #     logger.exception(f'ERROR: unexpected exception in @auth_required ({err})')
+            #     abort(Response(
+            #         f'Unauthorized: invalid access_token.',
+            #         HTTPStatus.UNAUTHORIZED
+            #     ))
+
+        return wrapper
+    return inner_decorator
