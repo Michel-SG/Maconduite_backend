@@ -10,17 +10,15 @@ logger = logging.getLogger(__name__)
 auth = Blueprint('auth', __name__)
 
 # (2) We associate routes to this blueprint
-@auth.route('/auth/register', methods=['GET'])
-def get_register():
+@auth.route('/auth/register', methods=['POST'])
+def post_register():
     """
     Route to register a new user.
-    This new user can be a Runner, or a Trainer, but not an Admin.
+    This new user can be a client, but not an Admin.
 
     Details:
         There is no route to register an Admin, as it would be a major security flaw.
         Admins should be inserted by-hand in the database.
-        There is also no route to register as a Runner, because a Runner has to be linked
-        to a Trainer. Only the Trainer or the Admin can create an account for the Runner.
     """
     try:  
         users = db.session.query(User).all()
@@ -29,6 +27,18 @@ def get_register():
         logger.info(f'> Users :: {users}')
         for r in users:
             json.append(r.json_out())
+
+
+        # if role not in ['trainer', 'runner']:
+            # raise Exception("'role' should be either trainer, or runner.")
+
+        json = request.get_json()
+        # if role == 'client':
+        new_user = User(email=json['email'], password='michel', first_name=json['first_name'], last_name=json['last_name'])
+        db.session.add(new_user)
+        db.session.commit()
+
+        # new_token = generate_token(new_user.public_id, role="client")
         return "<p>Hello, World goood!</p>"
 
     except sqlalchemy.exc.IntegrityError as err:
