@@ -3,6 +3,7 @@ from http import HTTPStatus
 import sqlalchemy
 from maconduite_back.models.user import User
 from maconduite_back.security import generate_token
+from maconduite_back.security import auth_required
 import logging
 from maconduite_back.app import db
 
