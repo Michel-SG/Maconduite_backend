@@ -22,17 +22,7 @@ def post_register():
         Admins should be inserted by-hand in the database.
     """
     try:  
-        users = db.session.query(User).all()
-        json = []
         
-        logger.info(f'> Users :: {users}')
-        for r in users:
-            json.append(r.json_out())
-
-
-        # if role not in ['trainer', 'runner']:
-            # raise Exception("'role' should be either trainer, or runner.")
-
         json = request.get_json()
         # if role == 'client':
         new_user = User(email=json['email'], password='michel', first_name=json['first_name'], last_name=json['last_name'])
