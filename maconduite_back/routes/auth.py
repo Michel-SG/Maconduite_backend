@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, abort, Response, current_app
 from http import HTTPStatus
 import sqlalchemy
 from maconduite_back.models.user import User
+from maconduite_back.security import generate_token
 import logging
 from maconduite_back.app import db
 
