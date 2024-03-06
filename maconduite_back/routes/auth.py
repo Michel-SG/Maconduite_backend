@@ -43,3 +43,42 @@ def post_register():
     except Exception as err:
         logger.exception(f'Bad request: {err}')
         abort(Response(f'Bad request: {err}', HTTPStatus.BAD_REQUEST))
+
+
+@auth.route('/auth/login/<role>', methods=['POST'])
+@auth_required(['admin', 'client'])
+def post_login(jwt, role):
+    """
+    Route to log in.
+    """
+    try:
+        if role not in ['admin', 'client']:
+            raise Exception('`role` should be one of [admin, client].')
+
+        json = request.get_json()
+        found_user = None
+
+        if role == 'admin':
+            logger.info(f'Admin user')
+    
+            # found_user = Admin.query.filter(
+            #     Admin.email == json['email'],
+            #     Admin.public_id == jwt['public_id']
+            # ).one_or_none()
+
+        elif role == 'client':
+            found_user = User.query.filter(
+                User.email == json['email'],
+                User.public_id == jwt['public_id']
+            ).one_or_none()
+        if found_user:
+            logger.info(f'User #{found_user.public_id} authenticated successfully')
+            logger.info(f'User email :: #{json["email"]}')
+            return found_user.json_out(), HTTPStatus.OK
+
+        else:
+            raise ValueError('Wrong email or password.')
+
+    except Exception as err:
+        logger.exception(f'Bad request: {err}')
+        abort(Response(f'Bad request: {err}', HTTPStatus.BAD_REQUEST))
