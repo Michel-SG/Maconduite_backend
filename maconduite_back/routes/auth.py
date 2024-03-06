@@ -29,8 +29,8 @@ def post_register():
         db.session.add(new_user)
         db.session.commit()
 
-        # new_token = generate_token(new_user.public_id, role="client")
-        return "<p>Hello, World goood!</p>"
+        new_token = generate_token(new_user.public_id, role="client")
+        return {"access_token": new_token}, HTTPStatus.OK
 
     except sqlalchemy.exc.IntegrityError as err:
         logger.exception(f'Bad request: User already exists ({err}).')
