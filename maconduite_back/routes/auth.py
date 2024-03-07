@@ -26,7 +26,7 @@ def post_register():
         
         json = request.get_json()
         # if role == 'client':
-        new_user = User(email=json['email'], password='michel', first_name=json['first_name'], last_name=json['last_name'])
+        new_user = User(email=json['email'], password=json['password'], first_name=json['first_name'], last_name=json['last_name'])
         db.session.add(new_user)
         db.session.commit()
 
