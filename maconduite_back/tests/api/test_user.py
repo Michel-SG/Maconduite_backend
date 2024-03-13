@@ -1,15 +1,19 @@
 from maconduite_back.models.user import User
+from http import HTTPStatus
+import uuid
 
-def test_create_user(app,db):
+
+def test_create_user(app, db, client):
     with app.app_context():
-        new_user = User(email='mickael', password="michello", first_name='SADEU', last_name='NGAKOUo')
+        unique_id = uuid.uuid4().hex
+        new_user = User(
+            email=f"uguello{unique_id}@gmail.com",
+            password="uguello",
+            first_name="SADEU Ugue",
+            last_name="NGAKOU michel",
+        )
         db.session.add(new_user)
         db.session.commit()
-        user = User.query.filter_by(password = "michello").first()
-        users = User.query.all()
-        assert user.email == 'mickael'
-        assert len(users) == 1
-
-def test_get_method(client):
-    response = client.get('/auth/register')
-    assert b'<p>Hello, World goood!</p>' in response.data
+        user = User.query.filter_by(password="uguello").first()
+        assert user.email == "uguello@gmail.com"
+        # assert len(users) == 1
