@@ -5,6 +5,8 @@ import pytest
 from maconduite_back.app import create_app
 from maconduite_back.models.user import User
 from maconduite_back.app import db as database
+
+
 @pytest.fixture
 def app():
     """
@@ -19,14 +21,15 @@ def app():
     """
     app = create_app()
     with app.app_context():
-        database.drop_all()
         database.create_all()
         database.session.commit()
     yield app
 
+
 @pytest.fixture
 def client(app):
     return app.test_client()
+
 
 @pytest.fixture
 def db():
@@ -40,7 +43,7 @@ def db():
     In particular, the database needs the app context because the path to the file
     `database.db` is defined in app.config['SQLALCHEMY_DATABASE_URI'], i.e. inside the app,
     and not inside the db object.
-    
+
     That's why the db fixture requires the `client` fixture.
     (We could instead require the `app` fixture, it makes no difference.)
     """
@@ -49,4 +52,3 @@ def db():
     # database.session.commit()
 
     return database
-
