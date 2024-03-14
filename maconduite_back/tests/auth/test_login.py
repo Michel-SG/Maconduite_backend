@@ -27,3 +27,4 @@ def test_login_user_in_database(app, db, client):
             json=json_edited,
         )
         assert res_login.status_code == HTTPStatus.OK
+        assert res_login.json["last_name"] == json_edited["last_name"]
