@@ -8,12 +8,12 @@ def test_create_user(app, db, client):
         unique_id = uuid.uuid4().hex
         new_user = User(
             email=f"uguello{unique_id}@gmail.com",
-            password="uguello",
+            password="uguel",
             first_name="SADEU Ugue",
             last_name="NGAKOU michel",
         )
         db.session.add(new_user)
         db.session.commit()
-        user = User.query.filter_by(password="uguello").first()
-        assert user.email == "uguello@gmail.com"
-        # assert len(users) == 1
+        user = User.query.filter_by(password="uguel").first()
+        assert user.last_name == new_user.last_name
+        
