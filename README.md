@@ -36,3 +36,20 @@ Dependencies listed in file `requirements.txt`.
 ``
     pytest
 ``
+## If you want to use container
+### run this command to provide image
+``
+    docker build -t image_name .
+``
+### Run container and maintain it up
+``
+    docker run -it --name container_name -p 8080:5000 -d image_name /bin/bash
+``
+### connect to the container
+``
+    docker exec -it container_name /bin/bash
+``
+### see more information
+``
+    docker ps -a
+``
