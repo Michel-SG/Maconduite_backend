@@ -5,7 +5,7 @@ services:
       - back
     container_name: web
     volumes:
-      #- ./templates/:/usr/share/nginx/html/
+      #- ./Maconduite_frontend/build/:/usr/share/nginx/html/
       - ./nginx/:/etc/nginx/conf.d/
     ports:
       - "8080:80"
