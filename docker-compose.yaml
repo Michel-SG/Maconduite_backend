@@ -1,11 +1,12 @@
 services:
   web:
-    image: nginx
+    image: nginx:1.25
     depends_on:
       - back
     container_name: web
     volumes:
-      - ./templates/:/usr/share/nginx/html/
+      #- ./templates/:/usr/share/nginx/html/
+      - ./nginx/:/etc/nginx/conf.d/
     ports:
       - "8080:80"
     networks:
@@ -13,9 +14,13 @@ services:
   back:
     build: ./
     container_name: back
-    command: gunicorn --bind 0.0.0.0:5000 --workers 2 "app:create_app()"
+    #command: gunicorn --bind 0.0.0.0:5000 --workers 2 "app:create_app()"
+    volumes:
+      - app:/etc/app
     networks:
       - networkapp
+volumes:
+  app:
 networks:
   networkapp:
     
