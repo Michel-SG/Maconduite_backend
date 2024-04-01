@@ -32,8 +32,8 @@ services:
     networks:
       - networkapp
 volumes:
-  postgres_data:
   app:
+  postgres_data:
 networks:
   networkapp:
     
