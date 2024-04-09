@@ -38,7 +38,7 @@ jobs:
         TOKEN: ${{ secrets.MACONDUITE_TOCKEN }}
         run: |
           cd ..
-          ls maconduite_back
+          ls 
         shell: bash
       - name: install dependencies
         run: |
