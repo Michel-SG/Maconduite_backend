@@ -32,9 +32,9 @@ jobs:
         uses: ShreyamMaity/Copy-Paste-Action@main
         with:
           TOKEN: ${{ secrets.MACONDUITE_TOCKEN }}
-          REPOSITORY : 'Maconduite_backend'
-          COPY-FILE-LOCATION : './requirements.txt'
-          PASTE-FILE-LOCATION : './maconduite_back/requirements.txt'
+          REPOSITORY: 'Maconduite_backend'
+          COPY-FILE-LOCATION: './requirements.txt'
+          PASTE-FILE-LOCATION: './maconduite_back/requirements.txt'
       - name: install dependencies
         run: |
           python -m pip install --upgrade pip
