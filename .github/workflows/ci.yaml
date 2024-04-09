@@ -35,9 +35,10 @@ jobs:
         #   REPOSITORY: 'Maconduite_backend'
         #   COPY-FILE-LOCATION: './requirements.txt'
         #   PASTE-FILE-LOCATION: './maconduite_back/requirements.txt'
+        TOKEN: ${{ secrets.MACONDUITE_TOCKEN }}
         run: |
           cd ..
-          cp -R requirements.txt /maconduite_back
+          cp -R requirements.txt /maconduite_back/requirements.txt
           ls maconduite_back
         shell: bash
       - name: install dependencies
