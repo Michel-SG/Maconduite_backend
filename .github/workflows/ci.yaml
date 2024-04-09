@@ -28,3 +28,11 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: 3.11
+      - name: copy requirements.txt file
+        run: sudo cp -R requirements.txt /maconduite_back/requirements.txt
+
+      - name: install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
