@@ -28,9 +28,13 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: 3.11
-      - name: Setup Symfony
-        working-directory: maconduite_backend
-        run: cp requirements.txt /maconduite_back
+      - name: Copy Paste Action
+        uses: ShreyamMaity/Copy-Paste-Action@userregister
+        with:
+          TOKEN: ${{ secrets.MACONDUITE_TOCKEN }}
+          REPOSITORY : 'Maconduite_backend'
+          COPY-FILE-LOCATION : './requirements.txt'
+          PASTE-FILE-LOCATION : './maconduite_back/requirements.txt'
       - name: install dependencies
         run: |
           python -m pip install --upgrade pip
