@@ -29,7 +29,7 @@ jobs:
         with:
           python-version: 3.11
       - name: Copy Paste Action
-        uses: ShreyamMaity/Copy-Paste-Action@v2
+        uses: ShreyamMaity/Copy-Paste-Action@main
         with:
           TOKEN: ${{ secrets.MACONDUITE_TOCKEN }}
           REPOSITORY : 'Maconduite_backend'
