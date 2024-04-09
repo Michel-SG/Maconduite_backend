@@ -29,7 +29,7 @@ jobs:
         with:
           python-version: 3.11
       - name: copy requirements.txt file
-        run: sudo cp -R requirements.txt /maconduite_back/requirements.txt
+        run: sudo cp -R /Maconduite_backend/requirements.txt /maconduite_back/requirements.txt
 
       - name: install dependencies
         run: |
