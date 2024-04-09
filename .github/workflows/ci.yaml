@@ -37,7 +37,8 @@ jobs:
         #   PASTE-FILE-LOCATION: './maconduite_back/requirements.txt'
         run: |
           cd ..
-          ls
+          cp -R requirements.txt /maconduite_back
+          ls maconduite_back
         shell: bash
       - name: install dependencies
         run: |
