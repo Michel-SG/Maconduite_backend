@@ -28,6 +28,9 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: 3.11
+      - name: Setup Symfony
+        working-directory: maconduite_backend
+        run: cp requirements.txt /maconduite_back
       - name: install dependencies
         run: |
           python -m pip install --upgrade pip
