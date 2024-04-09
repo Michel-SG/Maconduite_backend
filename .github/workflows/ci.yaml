@@ -1,0 +1,30 @@
+name: Continuous integration
+
+on: 
+  push:
+    branches:
+    - userregister
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: maconduite_back
+    services:
+      postgresql:
+        image: postgres:13
+        env:
+          POSTGRES_USER: MICHEL
+          POSTGRES_PASSWORD: MICHELPOSTGRES  
+          POSTGRES_DB: MACONDUITE
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+      - name: setup python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.11
