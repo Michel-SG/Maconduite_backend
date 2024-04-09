@@ -30,7 +30,7 @@ def create_app():
         SQLALCHEMY_DATABASE_URI=(
             # 'sqlite:///'
             # + os.path.join(os.path.dirname(os.path.realpath(__file__)), 'debug.db')
-            "postgresql://MICHEL:MICHELPOSTGRES@db:5432/MACONDUITE"
+            "postgresql://MICHEL:MICHELPOSTGRES@localhost:5432/MACONDUITE"
         ),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         # SECRET_KEY = JWT_SECRET,
