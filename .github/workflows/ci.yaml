@@ -36,7 +36,8 @@ jobs:
         #   COPY-FILE-LOCATION: './requirements.txt'
         #   PASTE-FILE-LOCATION: './maconduite_back/requirements.txt'
         run: |
-          ls ${{ github.action_path }}
+          cd ..
+          ls
         shell: bash
       - name: install dependencies
         run: |
