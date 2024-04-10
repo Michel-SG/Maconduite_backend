@@ -15,7 +15,7 @@ jobs:
       run:
         working-directory: maconduite_back
     services:
-      postgresql:
+      db:
         image: postgres:13
         env:
           POSTGRES_USER: MICHEL
