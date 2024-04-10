@@ -4,8 +4,9 @@ import sqlalchemy
 from maconduite_back.models.user import User
 from maconduite_back.security import generate_token
 from maconduite_back.security import auth_required
+from maconduite_back.app import bcrypt
 import logging
-import bcrypt
+
 from maconduite_back.app import db
 
 logger = logging.getLogger(__name__)
@@ -28,9 +29,7 @@ def post_register():
 
         json = request.get_json()
         # if role == 'client':
-        hashedpassword = bcrypt.hashpw(
-            json["password"].encode("utf-8"), bcrypt.gensalt()
-        )
+        hashedpassword = bcrypt.generate_password_hash(json['password'], 10).decode('utf-8')
         new_user = User(
             email=json["email"],
             password=hashedpassword,
@@ -74,10 +73,13 @@ def post_login(jwt, role):
             # ).one_or_none()
 
         elif role == "client":
+        
             user = User.query.filter(
                 User.email == json["email"], User.public_id == jwt["public_id"]
             ).one_or_none()
-            if user and bcrypt.checkpw(json["password"].encode("utf-8"), user.password):
+            hashedpassword = bcrypt.generate_password_hash(json['password'], 10)
+            logger.debug(f"User password end :: :: {user.password} :: ::user in :: :: {hashedpassword}")
+            if user and bcrypt.check_password_hash(user.password,json['password']):
                 found_user = user
             else:
                 valluematch = {"data": "Wrong email or password."}

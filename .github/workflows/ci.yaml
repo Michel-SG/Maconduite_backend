@@ -1,0 +1,48 @@
+name: Continuous integration
+
+on: 
+  push:
+    branches:
+    - userregister
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: maconduite_back
+    services:
+      db:
+        image: postgres:14
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres  
+          POSTGRES_DB: postgres
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+      - name: setup python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.11
+      - name: create virtual env and activate it
+        run: |
+          cd ..
+          python -m venv venv
+          . venv/bin/activate
+          ls
+      - name: install dependencies
+        run: |
+          cd ..
+          python -m pip install --upgrade pip
+          pip install --no-cache-dir -r requirements.txt
+          
+      - name: run tests
+        run: |
+          python -B -m pytest --cache-clear
