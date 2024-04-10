@@ -28,10 +28,8 @@ def post_register():
 
         json = request.get_json()
         # if role == 'client':
-        byteresponse = bytes(json["password"],encoding='utf8')
-        hashedpassword = bcrypt.hashpw(
-            byteresponse, bcrypt.gensalt()
-        )
+        byteresponse = bytes(json["password"], encoding="utf8")
+        hashedpassword = bcrypt.hashpw(byteresponse, bcrypt.gensalt())
         new_user = User(
             email=json["email"],
             password=hashedpassword,
@@ -75,11 +73,11 @@ def post_login(jwt, role):
             # ).one_or_none()
 
         elif role == "client":
-            byteresponse = bytes(json["password"],encoding='utf8')
+            byteresponse = bytes(json["password"], encoding="utf8")
             user = User.query.filter(
                 User.email == json["email"], User.public_id == jwt["public_id"]
             ).one_or_none()
-            if user and bcrypt.checkpw(byteresponse, user.password):
+            if user and bcrypt.checkpw(byteresponse, bytes(user.password)):
                 found_user = user
             else:
                 valluematch = {"data": "Wrong email or password."}
