@@ -37,10 +37,11 @@ jobs:
         #   PASTE-FILE-LOCATION: './maconduite_back/requirements.txt'
         # TOKEN: ${{ secrets.MACONDUITE_TOCKEN }}
       - name: Ckeck repository
+        shell: bash
         run: |
           cd ..
           sudo chmod -R 755 maconduite_back
-          cp -R requirements.txt /maconduite_back
+          cp -R requirements.txt /maconduite_back/requirements.txt
           ls 
         # shell: bash
       # - name: install dependencies
