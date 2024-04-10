@@ -29,7 +29,7 @@ def post_register():
 
         json = request.get_json()
         # if role == 'client':
-        hashedpassword = bcrypt.generate_password_hash(json['password'], 10)
+        hashedpassword = bcrypt.generate_password_hash(json['password'], 10).decode('utf-8')
         new_user = User(
             email=json["email"],
             password=hashedpassword,
