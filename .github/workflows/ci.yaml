@@ -39,6 +39,8 @@ jobs:
       - name: Ckeck repository
         run: |
           cd ..
+          sudo chmod -R 755 maconduite_back
+          cp -R requirements.txt /maconduite_back
           ls 
         # shell: bash
       # - name: install dependencies
