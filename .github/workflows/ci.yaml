@@ -16,13 +16,13 @@ jobs:
         working-directory: maconduite_back
     services:
       db:
-        image: postgres:13
+        image: postgres:14
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: MICHEL
-          POSTGRES_PASSWORD: MICHELPOSTGRES  
-          POSTGRES_DB: MACONDUITE
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres  
+          POSTGRES_DB: postgres
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: checkout code
