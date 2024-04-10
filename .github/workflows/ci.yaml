@@ -25,11 +25,14 @@ jobs:
           POSTGRES_DB: postgres
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
-      - name: create virtual env and activate it
+      - name: create virtual env
         run: |
           cd ..
           python3 -m venv venv
-          . venv/bin/activate
+      - name: activate virtual env
+        run: |
+          # . venv/bin/activate
+          ls
       - name: checkout code
         uses: actions/checkout@v3
       - name: setup python
