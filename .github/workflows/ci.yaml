@@ -38,7 +38,9 @@ jobs:
         TOKEN: ${{ secrets.MACONDUITE_TOCKEN }}
         run: |
           cd ..
-          ls 
+          sudo chmod -R 755 ~/maconduite_back
+          cp -R requirements.txt /maconduite_back
+          ls maconduite_back
         shell: bash
       - name: install dependencies
         run: |
