@@ -45,4 +45,4 @@ jobs:
           
       - name: run tests
         run: |
-          python -B -m pytest 
+          python -B -m pytest --cache-clear
