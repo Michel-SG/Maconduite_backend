@@ -3,10 +3,12 @@ import flask_sqlalchemy
 import os
 import logging
 from maconduite_back import loginconfig
+from flask_bcrypt import Bcrypt
 
 logger = logging.getLogger(__name__)
 
 db = flask_sqlalchemy.SQLAlchemy()
+bcrypt = Bcrypt()
 
 from maconduite_back.routes.auth import auth
 
@@ -45,6 +47,11 @@ def create_app():
 
     # initializing the flask_sqlalchemy object with the application context
     db.init_app(app)
+    
+    #initialize bcrypt
+    bcrypt.init_app(app)
+
+    # add data for testing purpose
     add_mock_data(app)
 
     app.register_blueprint(auth)
