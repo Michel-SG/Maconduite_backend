@@ -35,9 +35,9 @@ jobs:
         run: |
           cd ..
           python -m venv venv
-          ls
       - name: activate virtual env
         run: |
+          ls
           # . venv/bin/activate
           
       - name: install dependencies
