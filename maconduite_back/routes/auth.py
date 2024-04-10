@@ -29,7 +29,7 @@ def post_register():
 
         json = request.get_json()
         # if role == 'client':
-        hashedpassword = bcrypt.generate_password_hash(json['password'])
+        hashedpassword = bcrypt.generate_password_hash(json['password'], 10)
         new_user = User(
             email=json["email"],
             password=hashedpassword,
@@ -77,6 +77,8 @@ def post_login(jwt, role):
             user = User.query.filter(
                 User.email == json["email"], User.public_id == jwt["public_id"]
             ).one_or_none()
+            hashedpassword = bcrypt.generate_password_hash(json['password'], 10)
+            logger.debug(f"User password end :: :: {user.password} :: ::user in :: :: {hashedpassword}")
             if user and bcrypt.check_password_hash(user.password,json['password']):
                 found_user = user
             else:
