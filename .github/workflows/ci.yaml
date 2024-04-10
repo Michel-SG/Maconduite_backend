@@ -40,5 +40,8 @@ jobs:
         run: |
           ls
           flask run
+      - name: Test app
+        run: |
+          curl http://localhost:5000
 
           
