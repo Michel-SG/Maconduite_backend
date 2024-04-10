@@ -36,6 +36,11 @@ Dependencies listed in file `requirements.txt`.
 ``
     pytest
 ``
+### Make sure to use the following command from the maconduite_back folder:
+#### if you want to see logs
+``
+    pytest -s
+``
 ## If you want to use container
 ### run this command to provide image
 ``
