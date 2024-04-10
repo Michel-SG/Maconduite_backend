@@ -30,9 +30,9 @@ def create_app():
     )
     app.config.update(
         SQLALCHEMY_DATABASE_URI=(
-            # 'sqlite:///'
-            # + os.path.join(os.path.dirname(os.path.realpath(__file__)), 'debug.db')
-            "postgresql://postgres:postgres@localhost:5432/postgres"
+            'sqlite:///'
+            + os.path.join(os.path.dirname(os.path.realpath(__file__)), 'debug.db')
+            # "postgresql://postgres:postgres@localhost:5432/postgres"
         ),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         # SECRET_KEY = JWT_SECRET,
