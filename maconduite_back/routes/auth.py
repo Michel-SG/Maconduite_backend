@@ -77,7 +77,7 @@ def post_login(jwt, role):
             user = User.query.filter(
                 User.email == json["email"], User.public_id == jwt["public_id"]
             ).one_or_none()
-            if user and bcrypt.checkpw(byteresponse, bytes(user.password, encoding="utf8")):
+            if user and bcrypt.checkpw(byteresponse, user.password):
                 found_user = user
             else:
                 valluematch = {"data": "Wrong email or password."}
